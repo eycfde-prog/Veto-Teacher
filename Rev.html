@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weekly Review — EYC Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep:    #070b14;
+      --bg-panel:   #0d1526;
+      --bg-card:    #111d35;
+      --bg-hover:   #162040;
+      --accent:     #00d4ff;
+      --accent2:    #ff6b35;
+      --accent3:    #7c3aed;
+      --gold:       #f5c842;
+      --green:      #00e676;
+      --text-main:  #e2eaf5;
+      --text-muted: #5a7090;
+      --border:     rgba(0,212,255,0.15);
+      --border2:    rgba(255,107,53,0.2);
+      --glow:       0 0 20px rgba(0,212,255,0.25);
+      --radius:     12px;
+      --radius-sm:  8px;
+      --font-head:  'Orbitron', monospace;
+      --font-body:  'Rajdhani', sans-serif;
+      --font-mono:  'Share Tech Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-deep); color: var(--text-main);
+      font-family: var(--font-body); font-size: 16px;
+      line-height: 1.5; min-height: 100vh; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px; pointer-events: none; z-index: 0;
+    }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--accent3); border-radius: 10px; }
+
+    /* ── HEADER ── */
+    .hdr {
+      position: relative; z-index: 10;
+      background: var(--bg-panel); border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .hdr-brand { display: flex; align-items: center; gap: 10px; }
+    .hdr-logo  { height: 34px; object-fit: contain; filter: drop-shadow(0 0 6px var(--accent)); }
+    .hdr-title { font-family: var(--font-head); font-size: 0.8rem; color: var(--accent); letter-spacing: 3px; }
+    .hdr-chip  {
+      font-family: var(--font-mono); font-size: 0.68rem; color: var(--gold);
+      background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.3);
+      border-radius: 20px; padding: 4px 12px; letter-spacing: 1px;
+    }
+
+    /* ── STUDENT BADGE ── */
+    .student-bar {
+      position: relative; z-index: 5;
+      display: flex; justify-content: center; padding: 16px 20px 0;
+    }
+    .student-pill {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(0,212,255,0.06); border: 1px solid var(--border);
+      border-radius: 30px; padding: 8px 20px;
+      font-size: 0.85rem;
+    }
+    .student-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    .student-name  { color: var(--text-main); font-weight: 700; }
+    .student-email { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.72rem; }
+    .no-student-bar {
+      position: relative; z-index: 5;
+      display: flex; justify-content: center; padding: 14px 20px 0;
+    }
+    .no-student-pill {
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--accent2);
+      background: rgba(255,107,53,0.08); border: 1px solid var(--border2);
+      border-radius: 20px; padding: 6px 16px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 5;
+      text-align: center; padding: 36px 24px 24px;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 240px;
+      background: radial-gradient(ellipse, rgba(124,58,237,0.13) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-emoji {
+      font-size: 2.6rem; display: block; margin-bottom: 10px;
+      animation: float 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px var(--gold));
+    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.05rem, 3.5vw, 1.6rem);
+      letter-spacing: 3px; margin-bottom: 7px;
+    }
+    .hero-title em { color: var(--accent); font-style: normal; }
+    .hero-sub  { font-size: 0.88rem; color: var(--text-muted); max-width: 420px; margin: 0 auto 14px; }
+    .hero-tk   {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, rgba(245,200,66,0.12), rgba(245,200,66,0.04));
+      border: 1px solid rgba(245,200,66,0.35);
+      border-radius: 20px; padding: 5px 16px;
+      font-family: var(--font-mono); font-size: 0.7rem; color: var(--gold);
+    }
+
+    /* ── WEEK BADGE ── */
+    .week-strip {
+      position: relative; z-index: 5;
+      display: flex; justify-content: center; margin: 16px 0 24px;
+    }
+    .week-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(0,212,255,0.07); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 16px;
+      font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent);
+    }
+    .wdot { width:6px; height:6px; border-radius:50%; background:var(--green); animation: pd 2s infinite; }
+    @keyframes pd { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    /* ── GRID ── */
+    .grid {
+      position: relative; z-index: 5;
+      max-width: 940px; margin: 0 auto; padding: 0 20px 60px;
+      display: grid; grid-template-columns: 370px 1fr; gap: 24px; align-items: start;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 22px;
+      position: relative; overflow: hidden;
+    }
+    .card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+    .card.form-card::before { background: linear-gradient(90deg, var(--accent3), var(--accent)); }
+    .card.wall-card::before { background: linear-gradient(90deg, var(--gold), var(--accent3)); }
+
+    .ctitle {
+      font-family: var(--font-head); font-size: 0.65rem;
+      color: var(--accent); letter-spacing: 3px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+    }
+    .ctitle::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── LOCKED BANNER ── */
+    .locked-banner {
+      display: none; align-items: center; gap: 10px;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      background: rgba(245,200,66,0.08);
+      border: 1px solid rgba(245,200,66,0.25);
+      margin-bottom: 16px; font-size: 0.82rem; color: var(--gold);
+    }
+    .locked-banner.show { display: flex; }
+
+    /* ── FORM FIELDS ── */
+    .fg { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .fl { font-size: 0.68rem; font-weight: 600; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+    .fi, .fta {
+      background: var(--bg-deep); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-main);
+      font-family: var(--font-body); font-size: 0.95rem;
+      padding: 10px 13px; outline: none; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .fi:focus, .fta:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,255,0.1); }
+    .fi::placeholder, .fta::placeholder { color: var(--text-muted); }
+    .fi:disabled, .fta:disabled { opacity: 0.5; cursor: not-allowed; }
+    .fta { min-height: 100px; resize: vertical; line-height: 1.6; }
+    .fchar { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-muted); text-align: right; margin-top: 2px; }
+    .fchar.warn { color: var(--accent2); }
+
+    /* ── STARS ── */
+    .slbl { font-size: 0.68rem; font-weight: 600; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .srow { display: flex; gap: 5px; margin-bottom: 14px; }
+    .sbtn {
+      background: none; border: none; font-size: 1.65rem; cursor: pointer;
+      color: rgba(255,255,255,0.14); transition: all 0.15s; line-height: 1; padding: 0;
+    }
+    .sbtn.lit { color: var(--gold); filter: drop-shadow(0 0 5px var(--gold)); }
+    .sbtn:hover:not(:disabled) { transform: scale(1.25); }
+    .sbtn:disabled { cursor: not-allowed; }
+
+    /* ── SUBMIT ── */
+    .btn-sub {
+      width: 100%; margin-top: 4px;
+      background: linear-gradient(135deg, var(--accent), #0099cc);
+      color: var(--bg-deep); border: none; border-radius: var(--radius-sm);
+      padding: 13px; font-family: var(--font-head); font-size: 0.78rem;
+      font-weight: 600; letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-sub:hover:not(:disabled) { transform: translateY(-1px); box-shadow: var(--glow); }
+    .btn-sub:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .fmsg { font-size: 0.78rem; text-align: center; padding: 9px 12px; border-radius: var(--radius-sm); margin-top: 10px; display: none; }
+    .fmsg.err { background: rgba(255,60,60,0.1); color: #ff6b6b; border: 1px solid rgba(255,60,60,0.2); display:block; }
+    .fmsg.ok  { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.2); display:block; }
+
+    /* ── WALL ── */
+    .wstats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .wstat  { background: var(--bg-deep); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 8px; text-align: center; }
+    .wstat-v { font-family: var(--font-head); font-size: 1.05rem; color: var(--accent); }
+    .wstat-v.g { color: var(--gold); }
+    .wstat-l { font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+    .wscroll { display: flex; flex-direction: column; gap: 10px; max-height: 430px; overflow-y: auto; padding-right: 3px; }
+    .wscroll::-webkit-scrollbar { width: 3px; }
+    .wscroll::-webkit-scrollbar-thumb { background: var(--accent3); border-radius: 10px; }
+
+    .ritem {
+      background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-sm); padding: 13px;
+      animation: ri .35s ease;
+    }
+    @keyframes ri { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    .ri-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .ri-name { font-weight: 700; font-size: 0.85rem; color: var(--accent); }
+    .ri-stars { color: var(--gold); font-size: 0.82rem; letter-spacing: 1px; }
+    .ri-text  { font-size: 0.88rem; color: var(--text-main); line-height: 1.55; }
+
+    .wempty { text-align: center; padding: 44px 16px; font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .wload  { text-align: center; padding: 32px 16px; font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono); animation: pulse 1.4s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--bg-panel); border: 1px solid var(--accent);
+      border-radius: var(--radius); padding: 12px 20px; font-size: 0.88rem;
+      box-shadow: var(--glow); transform: translateY(80px); opacity: 0;
+      transition: all 0.3s; z-index: 999; max-width: 300px;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { padding: 28px 16px 18px; }
+    }
+    @media (max-width: 480px) {
+      .hdr { padding: 12px 16px; }
+      .hdr-title { display: none; }
+      .card { padding: 18px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-brand">
+    <img src="logo.png" class="hdr-logo" alt="EYC" onerror="this.style.display='none'" />
+    <span class="hdr-title">EYC&nbsp;ACADEMY</span>
+  </div>
+  <span class="hdr-chip">⬡ +5,000 TK / WEEK</span>
+</header>
+
+<!-- STUDENT BADGE (built by JS) -->
+<div id="studentBarWrap"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-emoji">💬</span>
+  <h1 class="hero-title">WEEKLY <em>REVIEW</em></h1>
+  <p class="hero-sub">Your feedback shapes every session — tell us what you loved and what we can improve.</p>
+  <div class="hero-tk">⭐ Earn 5,000 Tokens for your weekly review</div>
+</section>
+
+<!-- WEEK STRIP -->
+<div class="week-strip">
+  <div class="week-pill">
+    <div class="wdot"></div>
+    <span id="weekLabel">—</span>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+  <!-- FORM -->
+  <div class="card form-card">
+    <div class="ctitle">Submit Your Review</div>
+
+    <div class="locked-banner" id="lockedBanner">
+      <span>🔒</span>
+      <span id="lockedMsg">You've already reviewed this week. See you next week!</span>
+    </div>
+
+    <div id="formBody">
+      <!-- Name — readonly lو جاي من URL -->
+      <div class="fg">
+        <label class="fl">Your Name</label>
+        <input type="text" id="fName" class="fi" placeholder="e.g. Ahmed Mohamed" maxlength="60" autocomplete="name" />
+      </div>
+
+      <div class="slbl">Rate This Week</div>
+      <div class="srow" id="srow">
+        <button class="sbtn" data-v="1" onclick="setStar(1)">★</button>
+        <button class="sbtn" data-v="2" onclick="setStar(2)">★</button>
+        <button class="sbtn" data-v="3" onclick="setStar(3)">★</button>
+        <button class="sbtn" data-v="4" onclick="setStar(4)">★</button>
+        <button class="sbtn" data-v="5" onclick="setStar(5)">★</button>
+      </div>
+
+      <div class="fg">
+        <label class="fl">Your Comment</label>
+        <textarea id="fComment" class="fta"
+          placeholder="What did you enjoy? What can be improved?"
+          maxlength="500" oninput="onType()"></textarea>
+        <div class="fchar" id="fchar">0 / 500</div>
+      </div>
+
+      <button class="btn-sub" id="btnSub" onclick="doSubmit()">
+        <span id="btnLbl">SUBMIT REVIEW</span>
+        <span>→</span>
+      </button>
+      <div class="fmsg" id="fmsg"></div>
+    </div>
+  </div>
+
+  <!-- REVIEWS WALL -->
+  <div class="card wall-card">
+    <div class="ctitle">This Week's Reviews</div>
+
+    <div class="wstats">
+      <div class="wstat">
+        <div class="wstat-v" id="wCount">—</div>
+        <div class="wstat-l">Reviews</div>
+      </div>
+      <div class="wstat">
+        <div class="wstat-v g" id="wAvg">—</div>
+        <div class="wstat-l">Avg Rating</div>
+      </div>
+    </div>
+
+    <div class="wscroll" id="wscroll">
+      <div class="wload">LOADING REVIEWS...</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  /* ── CONFIG ── */
+  const GAS     = "https://script.google.com/macros/s/AKfycbzRj1XtnuXrrDR79M3H5J9AYs4sdBWSBhAa3jSC9XwcNxB-pumSw0pxv8jvbybyZrpGGw/exec";
+  const LS_KEY  = "eycWeeklyReview";
+
+  let star = 0;
+  let studentEmail = ""; // يتملا من URL params
+
+  /* ── الأسبوع ── */
+  function weekID() {
+    const now  = new Date();
+    const jan1 = new Date(now.getFullYear(), 0, 1);
+    const n    = Math.ceil(((now - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+    return `${now.getFullYear()}-W${String(n).padStart(2,"0")}`;
+  }
+
+  /* ── قراءة URL params ── */
+  function initFromURL() {
+    const p     = new URLSearchParams(window.location.search);
+    const name  = (p.get("name")  || "").trim();
+    const email = (p.get("email") || "").trim().toLowerCase();
+
+    document.getElementById("weekLabel").textContent =
+      `Week ${weekID().split("-W")[1]} · ${new Date().toLocaleDateString("en-GB",{month:"short",year:"numeric"})}`;
+
+    if (name && email) {
+      studentEmail = email;
+
+      // بناء Student Badge
+      const initials = name.split(" ").map(w=>w[0]).join("").substring(0,2).toUpperCase();
+      document.getElementById("studentBarWrap").innerHTML = `
+        <div class="student-bar">
+          <div class="student-pill">
+            <div class="student-avatar">${initials}</div>
+            <div>
+              <div class="student-name">${esc(name)}</div>
+              <div class="student-email">${esc(email)}</div>
+            </div>
+          </div>
+        </div>`;
+
+      // ملي الاسم وحول الحقل لـ readonly
+      const fName = document.getElementById("fName");
+      fName.value    = name;
+      fName.readOnly = true;
+      fName.style.opacity = "0.65";
+      fName.style.cursor  = "default";
+
+      // فحص القفل بالإيميل
+      checkLock(email);
+
+    } else {
+      // مفيش بيانات — اعرض تحذير
+      document.getElementById("studentBarWrap").innerHTML = `
+        <div class="no-student-bar">
+          <div class="no-student-pill">⚠ Please open this page from the EYC portal</div>
+        </div>`;
+    }
+  }
+
+  /* ── فحص القفل ── */
+  function checkLock(email) {
+    const key    = `${LS_KEY}-${email}-${weekID()}`;
+    const locked = !!localStorage.getItem(key);
+    document.getElementById("lockedBanner").classList.toggle("show", locked);
+    document.getElementById("btnSub").disabled = locked;
+    document.querySelectorAll(".fi, .fta, .sbtn").forEach(el => { el.disabled = locked; });
+    if (locked) {
+      document.getElementById("lockedMsg").textContent =
+        "You've already reviewed this week. Come back next week for more TK! 🎯";
+    }
+  }
+
+  function isLocked() {
+    if (!studentEmail) return false;
+    return !!localStorage.getItem(`${LS_KEY}-${studentEmail}-${weekID()}`);
+  }
+
+  /* ── النجوم ── */
+  function setStar(v) {
+    if (isLocked()) return;
+    star = v;
+    document.querySelectorAll(".sbtn").forEach(b => {
+      b.classList.toggle("lit", parseInt(b.dataset.v) <= v);
+    });
+  }
+
+  /* ── عداد الحروف ── */
+  function onType() {
+    const len = document.getElementById("fComment").value.length;
+    const el  = document.getElementById("fchar");
+    el.textContent = `${len} / 500`;
+    el.className   = len > 440 ? "fchar warn" : "fchar";
+  }
+
+  /* ── إرسال ── */
+  async function doSubmit() {
+    const name    = document.getElementById("fName").value.trim();
+    const comment = document.getElementById("fComment").value.trim();
+    const msgEl   = document.getElementById("fmsg");
+
+    if (!name)               return showMsg("Please enter your name.", "err");
+    if (!star)               return showMsg("Please pick a star rating (1–5).", "err");
+    if (comment.length < 10) return showMsg("Write at least 10 characters.", "err");
+    if (isLocked())          return showMsg("You've already reviewed this week!", "err");
+
+    const btn = document.getElementById("btnSub");
+    const lbl = document.getElementById("btnLbl");
+    btn.disabled = true;
+    lbl.textContent = "SUBMITTING...";
+
+    try {
+      const params = new URLSearchParams({
+        action: "submitReview",
+        name, email: studentEmail || name,
+        stars: star, comment, week: weekID()
+      });
+      const res  = await fetch(`${GAS}?${params}`);
+      const data = await res.json();
+
+      if (data.status === "success") {
+        // حفظ القفل في localStorage
+        localStorage.setItem(`${LS_KEY}-${(studentEmail || name).toLowerCase()}-${weekID()}`, "1");
+        showMsg("✓ Submitted! +5,000 TK added to your account.", "ok");
+        lbl.textContent = "SUBMITTED ✓";
+        if (studentEmail) checkLock(studentEmail);
+        loadReviews();
+        showToast("Review submitted! +5,000 TK 🎯");
+      } else {
+        showMsg(data.message || "Submission failed. Try again.", "err");
+        btn.disabled = false;
+        lbl.textContent = "SUBMIT REVIEW";
+      }
+    } catch(e) {
+      showMsg("Connection error. Check your network.", "err");
+      btn.disabled = false;
+      lbl.textContent = "SUBMIT REVIEW";
+    }
+  }
+
+  function showMsg(txt, cls) {
+    const el = document.getElementById("fmsg");
+    el.textContent = txt;
+    el.className   = "fmsg " + cls;
+  }
+
+  /* ── تحميل التقييمات ── */
+  async function loadReviews() {
+    const wall = document.getElementById("wscroll");
+    wall.innerHTML = '<div class="wload">LOADING...</div>';
+    try {
+      const res  = await fetch(`${GAS}?action=getReviews&week=${encodeURIComponent(weekID())}`);
+      const data = await res.json();
+      if (data.status === "success" && data.reviews?.length > 0) {
+        renderReviews(data.reviews);
+      } else {
+        wall.innerHTML = '<div class="wempty">No reviews yet this week.<br>Be the first! 🚀</div>';
+        setStats(0, 0);
+      }
+    } catch(e) {
+      wall.innerHTML = '<div class="wempty">Could not load reviews.</div>';
+    }
+  }
+
+  function renderReviews(list) {
+    const wall = document.getElementById("wscroll");
+    wall.innerHTML = "";
+    let total = 0;
+    list.forEach(r => {
+      const s = parseInt(r.stars) || 0;
+      total  += s;
+      const div = document.createElement("div");
+      div.className = "ritem";
+      div.innerHTML = `
+        <div class="ri-head">
+          <span class="ri-name">${esc(r.name)}</span>
+          <span class="ri-stars">${"★".repeat(s)}<span style="opacity:.25">${"☆".repeat(5-s)}</span></span>
+        </div>
+        <div class="ri-text">${esc(r.comment)}</div>`;
+      wall.appendChild(div);
+    });
+    setStats(list.length, total / list.length);
+  }
+
+  function setStats(count, avg) {
+    document.getElementById("wCount").textContent = count || "0";
+    document.getElementById("wAvg").textContent   = avg > 0 ? avg.toFixed(1) + " ★" : "—";
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg; t.className = "show";
+    setTimeout(() => { t.className=""; }, 3500);
+  }
+
+  /* ── INIT ── */
+  initFromURL();
+  loadReviews();
+</script>
+</body>
+</html>

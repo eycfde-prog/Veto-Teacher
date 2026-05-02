@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VETO PROGRAM | Smart Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="EYCSB.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     BANNER
+══════════════════════════════════════════ -->
+<header class="banner">
+    <button class="banner-back" onclick="window.location.href='vetoof.html'">← Back</button>
+    <img src="https://raw.githubusercontent.com/eycfde-prog/EYCVetoProgram/main/logo.png"
+         class="banner-logo" alt="VETO" onerror="this.style.display='none'">
+    <div class="banner-title">
+        <h1 id="title-text">VETO <span>BOARD</span></h1>
+        <p id="title-sub">Select an activity to begin</p>
+    </div>
+    <img src="https://raw.githubusercontent.com/eycfde-prog/EYCVetoProgram/main/MrEzz.png"
+         class="banner-avatar" alt="Mr. Ezz" onerror="this.style.display='none'">
+</header>
+
+<!-- ══════════════════════════════════════════
+     MAIN ACTIVITY GRID
+══════════════════════════════════════════ -->
+<main class="grid" id="grid"></main>
+
+<!-- ══════════════════════════════════════════
+     STAGE — Activity Fullscreen Overlay
+══════════════════════════════════════════ -->
+<div id="stage">
+    <button class="exit-btn" onclick="closeStage()">✖ Exit</button>
+    <div id="stage-loader">
+        <div class="spinner"></div>
+        <span>INITIALIZING...</span>
+    </div>
+    <div id="stage-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NOTE OVERLAY
+══════════════════════════════════════════ -->
+<div id="note-overlay">
+    <textarea id="note-textarea" placeholder="TYPE HERE..."></textarea>
+    <p>ESC TO CLOSE</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FREEZE LAYER
+══════════════════════════════════════════ -->
+<div id="freeze-layer">
+    <div id="freeze-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LASER + DRAW CANVAS
+══════════════════════════════════════════ -->
+<div id="laser"></div>
+<canvas id="draw-canvas"></canvas>
+
+<!-- ══════════════════════════════════════════
+     WHEEL OF NAMES OVERLAY
+══════════════════════════════════════════ -->
+<div id="wheel-overlay">
+
+    <div class="wheel-topbar">
+        <div class="wheel-topbar-title">WHEEL <span>OF NAMES</span></div>
+        <button class="wheel-close-btn" onclick="closeWheel()">✖ CLOSE</button>
+    </div>
+
+    <div class="wheel-body">
+
+        <!-- LEFT: Controls -->
+        <div class="wheel-controls">
+
+            <!-- Assemble from Gas -->
+            <div class="wc-section">
+                <div class="wc-label">ASSEMBLE CLASS</div>
+                <select id="wn-day" class="wc-select">
+                    <option value="">— Select Day —</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                </select>
+                <select id="wn-time" class="wc-select">
+                    <option value="">— Select Time —</option>
+                    <option value="12:00 PM">12:00 PM</option>
+                    <option value="2:00 PM">2:00 PM</option>
+                    <option value="4:00 PM">4:00 PM</option>
+                    <option value="6:00 PM">6:00 PM</option>
+                    <option value="8:00 PM">8:00 PM</option>
+                    <option value="10:00 PM">10:00 PM</option>
+                </select>
+                <button class="wc-btn wc-btn-gold" onclick="WheelEngine.assembleFromGas()">⚡ ASSEMBLE</button>
+                <div id="wn-status" class="wn-status"></div>
+            </div>
+
+            <!-- Add Name Manually -->
+            <div class="wc-section">
+                <div class="wc-label">ADD NAME</div>
+                <div class="wc-input-row">
+                    <input type="text" id="wn-add-input" class="wc-input" placeholder="Enter name..."
+                           onkeydown="if(event.key==='Enter')WheelEngine.addName()">
+                    <button class="wc-btn wc-btn-cyan" onclick="WheelEngine.addName()">+</button>
+                </div>
+            </div>
+
+            <!-- Alphabet Mode -->
+            <div class="wc-section">
+                <div class="wc-label">ALPHABET MODE</div>
+                <button class="wc-btn wc-btn-outline" onclick="WheelEngine.loadAlphabet()">🔤 LOAD A–Z</button>
+            </div>
+
+            <!-- Speed Control -->
+            <div class="wc-section">
+                <div class="wc-label">SPIN DURATION</div>
+                <div class="wc-speed-row">
+                    <span class="wc-speed-label">1s</span>
+                    <input type="range" id="wn-speed" class="wc-slider" min="1" max="5" value="3" step="1">
+                    <span class="wc-speed-label">5s</span>
+                </div>
+                <div class="wc-speed-val" id="wn-speed-val">3 seconds</div>
+            </div>
+
+            <!-- Name List -->
+            <div class="wc-section wc-section-grow">
+                <div class="wc-label">NAME LIST <span id="wn-count" class="wc-count">0</span></div>
+                <div id="wn-name-list" class="wn-name-list"></div>
+            </div>
+
+            <!-- Spin Button -->
+            <button class="wc-btn wc-btn-spin" id="wn-spin-btn" onclick="WheelEngine.spin()">▶ SPIN</button>
+
+        </div>
+
+        <!-- RIGHT: Wheel Canvas -->
+        <div class="wheel-canvas-wrap">
+            <div class="wheel-pointer">▼</div>
+            <canvas id="wheel-canvas"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Winner Overlay -->
+    <div id="wheel-winner" class="wheel-winner-overlay">
+        <div class="wheel-confetti-wrap" id="wheel-confetti"></div>
+        <div class="wheel-winner-name" id="wheel-winner-name"></div>
+        <button class="wc-btn wc-btn-gold" onclick="WheelEngine.dismissWinner()">✓ CONTINUE</button>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     TIMER OVERLAY
+══════════════════════════════════════════ -->
+<div id="timer-overlay">
+
+    <div class="timer-topbar">
+        <div class="timer-topbar-title">MISSION <span>TIMER</span></div>
+        <button class="timer-close-btn" onclick="closeTimer()">✖ CLOSE</button>
+    </div>
+
+    <div class="timer-body">
+
+        <!-- Big Display -->
+        <div class="timer-display-wrap">
+            <div id="timer-display" class="timer-display">05:00</div>
+            <div id="timer-bar-wrap" class="timer-bar-wrap">
+                <div id="timer-bar" class="timer-bar"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+            <div class="timer-preset-row">
+                <button class="timer-preset-btn" onclick="TimerEngine.setTime(1)">1 MIN</button>
+                <button class="timer-preset-btn" onclick="TimerEngine.setTime(2)">2 MIN</button>
+                <button class="timer-preset-btn" onclick="TimerEngine.setTime(3)">3 MIN</button>
+                <button class="timer-preset-btn" onclick="TimerEngine.setTime(5)">5 MIN</button>
+                <button class="timer-preset-btn" onclick="TimerEngine.setTime(10)">10 MIN</button>
+            </div>
+
+            <div class="timer-custom-row">
+                <input type="number" id="timer-custom-input" class="timer-custom-input"
+                       placeholder="MM" min="1" max="99"
+                       onkeydown="if(event.key==='Enter')TimerEngine.setCustomTime()">
+                <button class="wc-btn wc-btn-cyan" onclick="TimerEngine.setCustomTime()">SET</button>
+            </div>
+
+            <div class="timer-action-row">
+                <button class="timer-action-btn timer-start" id="timer-start-btn" onclick="TimerEngine.toggle()">▶ START</button>
+                <button class="timer-action-btn timer-reset" onclick="TimerEngine.reset()">↺ RESET</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     VETO PORTAL
+══════════════════════════════════════════ -->
+<div id="portal-overlay">
+
+    <div class="portal-topbar">
+        <div class="portal-title">VETO <span>PORTAL</span></div>
+        <button class="portal-close" onclick="closePortal()">✖ CLOSE</button>
+    </div>
+
+    <div class="portal-body">
+
+        <div class="portal-search-row">
+            <div class="p-search-label">AGENT OFFLINE CODE</div>
+            <div class="p-search-input-row">
+                <input type="text" id="portal-code-input" placeholder="V-0000"
+                       maxlength="12" autocomplete="off"
+                       onkeydown="if(event.key==='Enter')fetchStudent()">
+                <button id="portal-fetch-btn" onclick="fetchStudent()">⟳ SCAN</button>
+            </div>
+            <div id="portal-status"></div>
+        </div>
+
+        <div id="portal-lock-msg" class="visible">
+            SCAN AN AGENT CODE FIRST — SCORES ARE LOCKED UNTIL A STUDENT IS LOADED
+        </div>
+
+        <div id="portal-student-card">
+            <div class="psc-hero">
+                <div class="psc-avatar-wrap">
+                    <img id="portal-avatar" src="" alt="Agent" onerror="this.style.opacity='0'">
+                    <div class="psc-avatar-ring"></div>
+                </div>
+                <div class="psc-info">
+                    <div id="portal-name">—</div>
+                    <div class="psc-group-badge"><span>●</span><span id="portal-group">GROUP —</span></div>
+                    <div class="psc-stats-row">
+                        <div class="psc-stat-pill">
+                            <div class="psc-stat-label">TOKENS</div>
+                            <div class="psc-stat-value" id="portal-tokens">0</div>
+                        </div>
+                        <div class="psc-stat-pill">
+                            <div class="psc-stat-label">STARS</div>
+                            <div class="psc-stat-value cyan-val" id="portal-stars-count">0</div>
+                        </div>
+                        <div class="psc-stat-pill" style="gap:6px;">
+                            <div class="psc-stat-label">STAR RANK</div>
+                            <div class="psc-stars-strip" id="portal-stars-row"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="psc-rank-badge">
+                    <span class="psc-rank-label">GLOBAL RANK</span>
+                    <div class="psc-rank-value" id="portal-rank-full">—</div>
+                </div>
+            </div>
+            <div class="psc-grades">
+                <div class="psc-grades-title">MISSION SCORES</div>
+                <div class="grades-grid" id="portal-grades-grid"></div>
+                <button id="portal-submit-btn" onclick="submitGrades()">▶ UPLOAD SCORES TO SYSTEM</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TOOLBOX
+══════════════════════════════════════════ -->
+<div class="toolbox" id="toolbox">
+    <button class="tool-btn main" onclick="toggleToolbox()" title="Tools">⚙</button>
+    <button class="tool-btn" id="btn-portal"  onclick="openPortal()"  title="Veto Portal">🎯</button>
+    <button class="tool-btn" id="btn-wheel"   onclick="openWheel()"   title="Wheel of Names">🎡</button>
+    <button class="tool-btn" id="btn-timer"   onclick="openTimer()"   title="Timer">⏱</button>
+    <button class="tool-btn" id="btn-laser"   onclick="toggleLaser()" title="Laser">🔦</button>
+    <button class="tool-btn" id="btn-freeze"  onclick="toggleFreeze()" title="Freeze">❄️</button>
+    <button class="tool-btn" id="btn-reload"  onclick="location.reload()" title="Reload">🔄</button>
+    <button class="tool-btn" id="btn-note"    onclick="toggleNote()"  title="Note">📝</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- ══════════════════════════════════════════
+     ACTIVITY ENGINES
+     لإضافة engine جديد: أضف سطر <script> هنا
+══════════════════════════════════════════ -->
+<script src="data/Engines/listening-engine.js"></script>
+<script src="data/Engines/grammar-engine.js"></script>
+<!-- <script src="data/Engines/vocab-engine.js"></script> -->
+<script src="data/Engines/reading-engine.js"></script>
+<script src="data/Engines/one-shot-engine.js"></script>
+<script src="data/Engines/tongue-twister-engine.js"></script>
+<script src="data/Engines/squeezer-engine.js"></script>
+<script src="data/Engines/dmt-engine.js"></script>
+<script src="data/Engines/wish-engine.js"></script>
+<script src="data/Engines/project-engine.js"></script>
+
+<script src="EYCSB.js"></script>
+
+</body>
+</html>
