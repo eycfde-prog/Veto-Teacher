@@ -7,7 +7,7 @@
 // ════════════════════════════════════════════
 // GAS API ENDPOINT
 // ════════════════════════════════════════════
-const GAS_API = 'https://script.google.com/macros/s/AKfycbzRHoIIbrET1d2Oa9YFfl8SPUc7mJwI_SgNy-ATJHb4ulWSuHyUidbJ3qNYeGc8gy0p6w/exec';
+const GAS_API = 'https://script.google.com/macros/s/AKfycbw451wlnzInwWD1EFJX6N-L9kDPcWMeKWNlQkizzYKk2IKv82HtUR5azXoAv6mZlvyqdQ/exec';
 
 // ════════════════════════════════════════════
 
