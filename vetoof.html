@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VETO PROGRAM | Robotic Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-bright: #f5d06e;
+            --gold-dim: rgba(212, 175, 55, 0.25);
+            --gold-glow: rgba(212, 175, 55, 0.5);
+            --cyan: #00e5ff;
+            --cyan-dim: rgba(0, 229, 255, 0.15);
+            --bg: #04040a;
+            --bg-card: rgba(255, 255, 255, 0.025);
+            --border: rgba(212, 175, 55, 0.18);
+            --text-muted: rgba(255,255,255,0.45);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+        /* ── BODY & BG ── */
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated grid background */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridShift 20s linear infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(212,175,55,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        @keyframes gridShift { to { background-position: 60px 60px; } }
+
+        /* ── HEADER ── */
+        .header {
+            position: sticky; top: 0; z-index: 1000;
+            height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 clamp(16px, 5%, 60px);
+            background: rgba(4, 4, 10, 0.88);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute; bottom: -3px; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--cyan), var(--gold), transparent);
+            animation: scanline 3s ease-in-out infinite;
+        }
+
+        @keyframes scanline {
+            0%, 100% { opacity: 0.6; transform: scaleX(0.8); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+
+        .logo-img {
+            height: 48px;
+            filter: drop-shadow(0 0 12px var(--gold-glow));
+            transition: filter 0.3s;
+        }
+        .logo-img:hover { filter: drop-shadow(0 0 20px var(--gold-glow)); }
+
+        .header-center {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(0.9rem, 3vw, 1.7rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #fff 0%, var(--gold-bright) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+            color: var(--cyan);
+            letter-spacing: 4px;
+            opacity: 0.8;
+        }
+
+        .mr-ezz-img {
+            height: 60px;
+            border-radius: 8px;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 20px var(--gold-dim), inset 0 0 20px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+        .mr-ezz-img:hover { box-shadow: 0 0 35px var(--gold-glow); }
+
+        /* ── HERO STRIP ── */
+        .hero-strip {
+            position: relative; z-index: 1;
+            padding: clamp(20px, 4vw, 40px) clamp(16px, 5%, 60px) 0;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 12px;
+            max-width: 1600px; margin: 0 auto;
+        }
+
+        .hero-stat {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+            animation: fadeSlideUp 0.6s ease backwards;
+        }
+
+        .hero-stat:nth-child(1) { animation-delay: 0.1s; }
+        .hero-stat:nth-child(2) { animation-delay: 0.2s; }
+        .hero-stat:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-val {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4rem; font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .stat-lbl {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* ── SECTION HEADER ── */
+        .section-header {
+            position: relative; z-index: 1;
+            max-width: 1600px; margin: 30px auto 0;
+            padding: 0 clamp(16px, 5%, 60px);
+            display: flex; align-items: center; gap: 16px;
+        }
+
+        .section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        .section-line {
+            flex: 1; height: 1px;
+            background: linear-gradient(90deg, var(--gold-dim), transparent);
+        }
+
+        /* ── GRID ── */
+        .levels-container {
+            position: relative; z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+            gap: clamp(12px, 2vw, 24px);
+            padding: 20px clamp(16px, 5%, 60px) 60px;
+            max-width: 1600px; margin: 0 auto;
+        }
+
+        /* ── LEVEL CARD ── */
+        .level-block {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeSlideUp 0.5s ease backwards;
+            overflow: hidden;
+        }
+
+        /* stagger animation */
+        .level-block:nth-child(1)  { animation-delay: 0.05s; }
+        .level-block:nth-child(2)  { animation-delay: 0.1s; }
+        .level-block:nth-child(3)  { animation-delay: 0.15s; }
+        .level-block:nth-child(4)  { animation-delay: 0.2s; }
+        .level-block:nth-child(5)  { animation-delay: 0.25s; }
+        .level-block:nth-child(6)  { animation-delay: 0.3s; }
+        .level-block:nth-child(7)  { animation-delay: 0.35s; }
+        .level-block:nth-child(8)  { animation-delay: 0.4s; }
+        .level-block:nth-child(9)  { animation-delay: 0.45s; }
+        .level-block:nth-child(10) { animation-delay: 0.5s; }
+        .level-block:nth-child(11) { animation-delay: 0.55s; }
+        .level-block:nth-child(12) { animation-delay: 0.6s; }
+
+        /* corner cuts */
+        .level-block::before {
+            content: '';
+            position: absolute; top: 0; right: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 0 28px 28px 0;
+            border-color: transparent var(--gold) transparent transparent;
+            opacity: 0.5;
+            transition: opacity 0.3s, border-color 0.3s;
+        }
+
+        .level-block::after {
+            content: '';
+            position: absolute; top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.06), transparent);
+            transition: left 0.5s ease;
+            pointer-events: none;
+        }
+
+        .level-block:hover::after { left: 150%; }
+        .level-block:hover { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-dim), 0 20px 40px rgba(0,0,0,0.6), inset 0 0 30px rgba(212,175,55,0.04); transform: translateY(-4px); }
+        .level-block:hover::before { opacity: 1; border-color: transparent var(--gold-bright) transparent transparent; }
+
+        .level-block.active { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold-dim), 0 25px 50px rgba(0,0,0,0.7), inset 0 0 40px rgba(212,175,55,0.06); }
+        .level-block.active::before { opacity: 1; }
+
+        /* card header */
+        .level-card {
+            padding: clamp(16px, 3vw, 24px);
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .level-left { display: flex; align-items: center; gap: 16px; }
+
+        .level-index-box {
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+            border: 1px solid var(--gold-dim);
+            clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+            flex-shrink: 0;
+        }
+
+        .level-index {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem; font-weight: 900;
+            color: var(--gold);
+        }
+
+        .level-meta { display: flex; flex-direction: column; gap: 3px; }
+
+        .level-sector {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            opacity: 0.7;
+        }
+
+        .level-name {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .level-right { display: flex; align-items: center; gap: 10px; }
+
+        .session-count {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .arrow-btn {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border);
+            background: rgba(212,175,55,0.05);
+            transition: all 0.3s;
+            clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+        }
+
+        .arrow-btn svg {
+            width: 14px; height: 14px;
+            stroke: var(--gold); fill: none;
+            transition: transform 0.35s ease;
+        }
+
+        .level-block.active .arrow-btn svg { transform: rotate(180deg); }
+        .level-block:hover .arrow-btn { background: rgba(212,175,55,0.15); border-color: var(--gold); }
+
+        /* progress bar */
+        .level-progress {
+            height: 2px;
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--cyan));
+            width: 0%;
+            animation: progressLoad 1s ease forwards;
+            animation-delay: inherit;
+        }
+
+        @keyframes progressLoad { to { width: var(--prog, 0%); } }
+
+        /* ── DRAWER ── */
+        .lectures-drawer {
+            height: 0; overflow: hidden;
+            transition: height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-inner {
+            padding: 4px 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .drawer-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            padding: 10px 4px 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .drawer-label::after {
+            content: '';
+            flex: 1; height: 1px;
+            background: var(--border);
+        }
+
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .lectures-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .lecture-item {
+            position: relative;
+            padding: 14px 4px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(212,175,55,0.04);
+            border: 1px solid rgba(212,175,55,0.2);
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+            transition: all 0.25s ease;
+            overflow: hidden;
+        }
+
+        .lecture-item::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--gold), var(--cyan));
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .lecture-item:hover::before { opacity: 1; }
+        .lecture-item:hover { transform: scale(1.06); box-shadow: 0 0 20px rgba(212,175,55,0.4); border-color: transparent; }
+
+        .lecture-item:active { transform: scale(0.97); }
+
+        .lec-content { position: relative; z-index: 1; }
+
+        .lec-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            display: block;
+            transition: color 0.25s;
+        }
+
+        .lec-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem; font-weight: 900;
+            color: var(--gold);
+            display: block;
+            transition: color 0.25s;
+        }
+
+        .lecture-item:hover .lec-label,
+        .lecture-item:hover .lec-num { color: #000; }
+
+        /* ── LOADING OVERLAY ── */
+        .loading-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(4, 4, 10, 0.95);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 24px;
+        }
+        .loading-overlay.visible { display: flex; }
+
+        .spinner-ring {
+            position: relative; width: 72px; height: 72px;
+        }
+
+        .spinner-ring::before,
+        .spinner-ring::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+
+        .spinner-ring::before {
+            border-top-color: var(--gold);
+            border-right-color: var(--gold-dim);
+            animation: spin 0.9s linear infinite;
+        }
+
+        .spinner-ring::after {
+            border-bottom-color: var(--cyan);
+            border-left-color: var(--cyan-dim);
+            animation: spin 0.9s linear infinite reverse;
+            inset: 8px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            animation: blink 1s ease infinite;
+        }
+
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .loading-bar {
+            width: 200px; height: 2px;
+            background: rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--cyan), var(--gold));
+            background-size: 200% 100%;
+            animation: barSlide 0.6s ease forwards, shimmer 1s linear infinite;
+        }
+
+        @keyframes barSlide { from { width: 0%; } to { width: 100%; } }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+
+        /* ── FOOTER BADGE ── */
+        .protected-badge {
+            position: fixed; bottom: 16px; right: 16px; z-index: 100;
+            background: rgba(4,4,10,0.8);
+            border: 1px solid var(--border);
+            padding: 5px 12px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            opacity: 0.45;
+            pointer-events: none;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 600px) {
+            .header { height: 64px; }
+            .logo-img { height: 36px; }
+            .mr-ezz-img { height: 48px; }
+            .main-title { letter-spacing: 2px; }
+            .hero-strip { gap: 8px; }
+            .hero-stat { padding: 8px 14px; }
+            .stat-val { font-size: 1.1rem; }
+            .levels-container { padding: 16px 12px 50px; gap: 10px; }
+            .level-card { padding: 14px; }
+            .level-index-box { width: 40px; height: 40px; }
+            .level-index { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 380px) {
+            .subtitle { display: none; }
+            .session-count { display: none; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-ring"></div>
+        <div class="loading-text">LOADING SESSION...</div>
+        <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+    </div>
+
+    <header class="header">
+        <img src="https://raw.githubusercontent.com/eycfde-prog/EYCVetoProgram/main/logo.png" alt="VETO" class="logo-img">
+        <div class="header-center">
+            <h1 class="main-title">VETO SYSTEM v2.0</h1>
+            <span class="subtitle">ROBOTIC HUB · PROGRAM ACCESS</span>
+        </div>
+        <img src="https://raw.githubusercontent.com/eycfde-prog/EYCVetoProgram/main/MrEzz.png" alt="Mr Ezz" class="mr-ezz-img">
+    </header>
+
+    <div class="hero-strip" id="heroStrip">
+        <div class="hero-stat">
+            <div>
+                <div class="stat-val">12</div>
+                <div class="stat-lbl">LEVELS</div>
+            </div>
+        </div>
+        <div class="hero-stat">
+            <div>
+                <div class="stat-val">48</div>
+                <div class="stat-lbl">SESSIONS</div>
+            </div>
+        </div>
+        <div class="hero-stat">
+            <div>
+                <div class="stat-val" id="statusDot">●&nbsp;LIVE</div>
+                <div class="stat-lbl">STATUS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <span class="section-label">// SELECT SECTOR</span>
+        <div class="section-line"></div>
+    </div>
+
+    <main class="levels-container" id="mainContainer"></main>
+
+    <div class="protected-badge">⚡ PROTECTED · VETO v2.0</div>
+
+    <script>
+        const container = document.getElementById('mainContainer');
+        const levelsCount = 12;
+        const sessionsPerLevel = 4;
+        let isNavigating = false;
+
+        function initApp() {
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 1; i <= levelsCount; i++) {
+                const block = document.createElement('div');
+                block.className = 'level-block';
+                block.id = `level-${i}`;
+
+                let sessionsHTML = '';
+                for (let s = 1; s <= sessionsPerLevel; s++) {
+                    sessionsHTML += `
+                        <div class="lecture-item" onclick="event.stopPropagation(); navigate('${i}-${s}')">
+                            <div class="lec-content">
+                                <span class="lec-label">SESSION</span>
+                                <span class="lec-num">${String(s).padStart(2,'0')}</span>
+                            </div>
+                        </div>`;
+                }
+
+                const progRand = Math.floor(Math.random() * 60 + 10);
+
+                block.innerHTML = `
+                    <div class="level-card" onclick="toggleDrawer(${i})">
+                        <div class="level-left">
+                            <div class="level-index-box">
+                                <span class="level-index">${String(i).padStart(2,'0')}</span>
+                            </div>
+                            <div class="level-meta">
+                                <span class="level-sector">SECTOR · ${String(i).padStart(2,'0')}</span>
+                                <span class="level-name">LEVEL ${String(i).padStart(2,'0')}</span>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <span class="session-count">${sessionsPerLevel} sessions</span>
+                            <div class="arrow-btn">
+                                <svg viewBox="0 0 24 24" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-progress">
+                        <div class="progress-fill" style="--prog: 0%"></div>
+                    </div>
+                    <div class="lectures-drawer" id="drawer-${i}">
+                        <div class="drawer-inner">
+                            <div class="drawer-label">SESSIONS</div>
+                            <div class="lectures-grid">${sessionsHTML}</div>
+                        </div>
+                    </div>`;
+                fragment.appendChild(block);
+            }
+            container.appendChild(fragment);
+        }
+
+        function toggleDrawer(id) {
+            const target = document.getElementById(`level-${id}`);
+            const drawer = document.getElementById(`drawer-${id}`);
+            const isActive = target.classList.contains('active');
+
+            document.querySelectorAll('.level-block.active').forEach(b => {
+                b.classList.remove('active');
+                b.querySelector('.lectures-drawer').style.height = '0';
+            });
+
+            if (!isActive) {
+                target.classList.add('active');
+                const h = drawer.querySelector('.drawer-inner').scrollHeight;
+                drawer.style.height = h + 'px';
+                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
+            }
+        }
+
+        function navigate(sid) {
+            if (isNavigating) return;
+            isNavigating = true;
+            document.getElementById('loadingOverlay').classList.add('visible');
+            setTimeout(() => { window.location.href = `EYCSB.html?session=${sid}`; }, 700);
+        }
+
+        document.onkeydown = function(e) {
+            if (e.key === 'F12') return false;
+            if (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) return false;
+            if (e.ctrlKey && ['C','V','U','S','A','P'].includes(e.key.toUpperCase())) return false;
+            if (e.metaKey && ['C','V','U','S','A','P'].includes(e.key.toUpperCase())) return false;
+        };
+        document.addEventListener('dragstart', e => e.preventDefault());
+        document.addEventListener('keyup', e => {
+            if (e.key === 'PrintScreen') navigator.clipboard?.writeText('').catch(() => {});
+        });
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
